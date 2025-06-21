@@ -1,0 +1,5 @@
+package it.fila1.cantieri.dto;
+
+public class CantiereDto {
+
+}

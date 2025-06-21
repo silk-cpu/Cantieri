@@ -1,0 +1,85 @@
+package it.fila1.cantieri.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.el.stream.Optional;
+import org.hibernate.mapping.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+
+@RestController
+@CrossOrigin(origins="localhost placeholder!!", methods={RequestMethod.GET,  
+													     RequestMethod.POST,
+													     RequestMethod.DELETE,
+													     RequestMethod.OPTIONS})	
+public class CantiereController {
+	
+	private CantiereRepository cantiereRepository;
+	
+	public CantiereController (CantiereRepository cantiereRepository) 
+	{
+		this.cantiereRepository = cantiereRepository;
+	}
+
+	@GetMapping("/cantieri")
+	public ResponseEntity<List<Cantiere>> index()
+	{	
+		List<Cantiere> products = this.cantiereRepository.findAll();
+		return ResponseEntity.status(HttpStatus.OK).body(cantieri);
+	}
+	
+	@GetMapping("/products/{id}")
+	public ResponseEntity<?> show(@PathVariable Long id)
+	{
+		Optional<Cantiere> optionalProduct = this.cantiereRepository.findById(id);
+		
+		if (optionalCantiere.isEmpty()) 
+		{
+			//404
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cantiere non trovato");
+		}
+		else 
+		{
+			return ResponseEntity.status(HttpStatus.OK).body(optionalCantiere.get());
+		}
+	}
+	
+	@PostMapping("/products")
+	public ResponseEntity<?> store(
+		@Valid @RequestBody CantiereRequestDTO cantiereRequestDTO,
+		BindingResult result
+	)
+	{	
+		if (result.hasErrors())
+		 {
+			Map<String, String> errors = new HashMap<String,String>();
+			result.getFieldErrors().forEach( error -> errors.put(error.getField(), error.getDefaultMessage()));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+		 }
+		
+		CantiereMapper cantiereMapper = new CantiereMapper();
+		
+		Cantiere cantiere = cantiereMapper.dtoToEntity(cantiereRequestDTO);
+		
+		Cantiere cantiereInserted = this.cantiereRepository.save(cantiere);
+		
+		System.out.println(cantiereRequestDTO);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(cantiereInserted);
+	}
+	
+	
+	
+	
+}

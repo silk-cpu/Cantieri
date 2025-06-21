@@ -1,0 +1,33 @@
+networks:
+  progettocantieri:
+    name: "progettocantieri"
+    driver: "bridge"
+
+services:
+  db:
+    networks:
+      - progettocantieri
+    container_name: "progettocantieri-db"
+    image: mysql:9.3.0
+    ports:
+      - 5432:3306
+
+    volumes:
+      - ./database:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  phpmyadmin:
+    networks:
+      - progettocantieri
+    container_name: "progettocantieri-dbhandler"
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1

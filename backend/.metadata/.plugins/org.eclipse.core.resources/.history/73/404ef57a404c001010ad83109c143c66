@@ -1,0 +1,28 @@
+package it.fila1.cantieri.dto;
+
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+public class CantiereDto {
+	
+	@NotNull
+	private String committente;
+	@NotEmpty
+	private int cap;
+	@NotNull
+	private String nazione;
+	@NotNull
+	private String data_inizio_cantiere;
+	@NotNull
+	private String data_fine_cantiere;
+	@NotNull
+	private String email;
+	@NotNull
+	private String logo;
+	@NotNull
+	private String pdf;
+	@NotNull
+	private String firma;
+	
+}

@@ -1,0 +1,13 @@
+package it.fila1.cantieri.mapper;
+
+import it.fila1.cantieri.dto.CantiereDto;
+import it.fila1.cantieri.entities.Cantiere;
+
+public class CantiereMapper {
+	
+	public static void dtoToEntity(CantiereDto cantiereDto) {
+		Cantiere cantiere = new Cantiere();
+		cantiere.setCap(cantiereDto.);
+	}
+
+}
