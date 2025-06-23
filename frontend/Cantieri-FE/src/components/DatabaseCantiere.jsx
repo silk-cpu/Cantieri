@@ -1,3 +1,4 @@
+import axios from "axios"
 import { useEffect, useState } from "react"
 import Dropdown from 'react-bootstrap/Dropdown'
 
@@ -9,6 +10,19 @@ function Cantiere(props){
         console.log("runner: ",props.data)
         setData(props.data)
     },[props.data])
+
+    const deleteCantiere = (id) =>{
+        axios
+            .delete("http://localhost:8090/cantieri/"+id)
+            .then((response)=>{
+                console.log(response)
+                alert("cancellato")
+                props.refreshData()
+            })
+
+        console.log("http://localhost:8090/cantieri/"+id)
+        
+    }
 
     return(<>
         <table class="table"> 
@@ -39,13 +53,14 @@ function Cantiere(props){
                     <td>{item.nome}</td>
                     <td>{item.committente}</td>
                     <td>{item.cap}</td>
-                    <td>{item.nazione}</td>
+                    <td>{item.nazioni}</td>
                     <td>{item.data_inizio_cantiere}</td>
                     <td>{item.data_fine_cantiere}</td>
                     <td>{item.email}</td>
                     <td>{item.logo}</td>
                     <td>{item.pdf}</td>
                     <td>{item.firma}</td>
+                    <td><button class="btn btn-danger" value={item.id} onClick={() => deleteCantiere(item.id)}>delete</button></td>
                 </tr>
                 ))
             )}

@@ -29,5 +29,7 @@ public class AziendaDto {
 	private String mappa;
 	
 	private String email;
+	
+	private Long fk_cantiere;
 		
 }

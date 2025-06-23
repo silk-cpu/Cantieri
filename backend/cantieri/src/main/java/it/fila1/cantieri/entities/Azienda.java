@@ -14,7 +14,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.hibernate.annotations.Formula;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import it.fila1.cantieri.entities.Cantiere;
 @Entity
@@ -46,10 +50,28 @@ public class Azienda {
 
     @Column
     private String email;
-
+    
+    
     // Many-to-one relationship with Cantiere
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_cantiere") 
     @JsonIgnore  // Add this annotation
     private Cantiere cantiere;
+    
+
+	@Column(name = "fk_cantiere", insertable = false, updatable = false)
+	@JsonProperty("fk_cantiere")
+	private Long fkCantiere;
+	
+	// Add this method to handle the relationship when posting
+	@JsonSetter("fk_cantiere")
+	public void setFkCantiere(Long fkCantiere) {
+	    this.fkCantiere = fkCantiere;
+	    if (fkCantiere != null) {
+	        this.cantiere = new Cantiere();
+	        this.cantiere.setId(fkCantiere); // Assuming Cantiere has setId method
+	    } else {
+	        this.cantiere = null;
+	    }
+	}
 }

@@ -28,7 +28,7 @@ public class CantiereMapper {
 	    if (cantiereDto.getAzienda() != null && !cantiereDto.getAzienda().isEmpty()) {
 	        List<Azienda> aziendeList = new ArrayList<>();
 	        for (AziendaDto aziendaDto : cantiereDto.getAzienda()) {
-	            Azienda azienda = convertAziendaDtoToEntity(aziendaDto);
+	            Azienda azienda = AziendaMapper.convertAziendaDtoToEntity(aziendaDto);
 	            azienda.setCantiere(cantiere);  // Associate the Cantiere with the Azienda
 	            aziendeList.add(azienda);
 	        }
@@ -38,16 +38,4 @@ public class CantiereMapper {
 	    return cantiere;
 	}
 
-
-	private static Azienda convertAziendaDtoToEntity(AziendaDto aziendaDto) {
-	    Azienda azienda = new Azienda();
-	    azienda.setRagione_sociale(aziendaDto.getRagione_sociale());
-	    azienda.setNatura_giuridica(aziendaDto.getNatura_giuridica());
-	    azienda.setPiva(aziendaDto.getPiva());
-	    azienda.setCodice_ateco(aziendaDto.getCodice_ateco());
-	    azienda.setIndirizzo(aziendaDto.getIndirizzo());
-	    azienda.setMappa(aziendaDto.getMappa());
-	    azienda.setEmail(aziendaDto.getEmail());
-	    return azienda;
-	}
 }
