@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Button } from "react-bootstrap"
 import axios from "axios"
+import nations from '../../files/nazioni.json';
+
 
 function DatabaseInsert(props){
 
@@ -92,12 +94,7 @@ function DatabaseInsert(props){
     }
 
     useEffect(()=>{
-        axios
-            .get("https://www.apicountries.com/countries")
-            .then((response)=>{
-                setNazioni(response.data)
-                console.log("nazioni: ",nazioni)
-            })
+        setNazioni(nations);
     },[props.data])
 
     useEffect(()=>{

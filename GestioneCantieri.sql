@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Creato il: Giu 18, 2025 alle 09:20
--- Versione del server: 9.3.0
--- Versione PHP: 8.2.28
+-- Generation Time: Jun 25, 2025 at 09:36 AM
+-- Server version: 9.3.0
+-- PHP Version: 8.2.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `aziende`
+-- Table structure for table `aziende`
 --
 
 CREATE TABLE `aziende` (
@@ -33,7 +33,7 @@ CREATE TABLE `aziende` (
   `natura_giuridica` enum('ditta individuale','societa') NOT NULL,
   `piva` bigint NOT NULL,
   `codice_ateco` varchar(255) NOT NULL,
-  `inidirizzo` varchar(255) NOT NULL,
+  `indirizzo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `mappa` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `fk_cantiere` bigint NOT NULL,
@@ -43,16 +43,17 @@ CREATE TABLE `aziende` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dump dei dati per la tabella `aziende`
+-- Dumping data for table `aziende`
 --
 
-INSERT INTO `aziende` (`id`, `ragione_sociale`, `natura_giuridica`, `piva`, `codice_ateco`, `inidirizzo`, `mappa`, `email`, `fk_cantiere`, `note`, `created_at`, `updated_at`) VALUES
-(1, 'testNomeAzienda', 'ditta individuale', 11111111111, 'J 58.11.00', 'via TestIndirizzo n. 138', 'googlemaps', 'testNomeAzienda@gmail.com', 1, NULL, '2025-06-18 09:18:58', '2025-06-18 09:18:58');
+INSERT INTO `aziende` (`id`, `ragione_sociale`, `natura_giuridica`, `piva`, `codice_ateco`, `indirizzo`, `mappa`, `email`, `fk_cantiere`, `note`, `created_at`, `updated_at`) VALUES
+(1, 'testNomeAzienda', 'ditta individuale', 111, 'J 58.11.00', 'via TestIndirizzo n. 138', 'googlemaps', 'testNomeAzienda@gmail.com', 1, NULL, '2025-06-18 09:18:58', '2025-06-25 09:02:01'),
+(2, 'azienda2', 'societa', 22, 'tat', 'tat', 'tat', 'tat@gmail.com', 1, NULL, '2025-06-25 09:14:10', '2025-06-25 09:14:10');
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `cantieri`
+-- Table structure for table `cantieri`
 --
 
 CREATE TABLE `cantieri` (
@@ -73,51 +74,51 @@ CREATE TABLE `cantieri` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dump dei dati per la tabella `cantieri`
+-- Dumping data for table `cantieri`
 --
 
 INSERT INTO `cantieri` (`id`, `nome`, `committente`, `cap`, `nazione`, `data_inizio_cantiere`, `data_fine_cantiere`, `email`, `logo`, `pdf`, `firma`, `note`, `created_at`, `updated_at`) VALUES
 (1, 'CantiereTest', 'Committente Test', 64023, 'Italy', '2025-06-01', '2025-06-19', 'cantieretest@gmail.com', 'logos/logotest.jpg', 'pdf_files/testpdf.pdf', 'firme/firme.jpg', NULL, '2025-06-18 09:11:25', '2025-06-18 09:11:25');
 
 --
--- Indici per le tabelle scaricate
+-- Indexes for dumped tables
 --
 
 --
--- Indici per le tabelle `aziende`
+-- Indexes for table `aziende`
 --
 ALTER TABLE `aziende`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_cantiere` (`fk_cantiere`);
 
 --
--- Indici per le tabelle `cantieri`
+-- Indexes for table `cantieri`
 --
 ALTER TABLE `cantieri`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT per le tabelle scaricate
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT per la tabella `aziende`
+-- AUTO_INCREMENT for table `aziende`
 --
 ALTER TABLE `aziende`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT per la tabella `cantieri`
+-- AUTO_INCREMENT for table `cantieri`
 --
 ALTER TABLE `cantieri`
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- Limiti per le tabelle scaricate
+-- Constraints for dumped tables
 --
 
 --
--- Limiti per la tabella `aziende`
+-- Constraints for table `aziende`
 --
 ALTER TABLE `aziende`
   ADD CONSTRAINT `aziende_ibfk_1` FOREIGN KEY (`fk_cantiere`) REFERENCES `cantieri` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
