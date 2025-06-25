@@ -34,6 +34,6 @@ public class CantiereDtoUpdator {
 	
 	private String firma;
 
-	private List<Azienda> azienda;
+	private List<AziendaDto> azienda;
 	
 }

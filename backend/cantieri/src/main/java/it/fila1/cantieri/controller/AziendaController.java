@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.fila1.cantieri.dto.AziendaDto;
+import it.fila1.cantieri.dto.AziendaDtoUpdator;
 import it.fila1.cantieri.dto.CantiereDto;
+import it.fila1.cantieri.dto.CantiereDtoUpdator;
 import it.fila1.cantieri.entities.Azienda;
 import it.fila1.cantieri.entities.Cantiere;
 import it.fila1.cantieri.mapper.AziendaMapper;
@@ -113,6 +116,45 @@ private CantiereRepository cantiereRepository;
 		aziendaRepository.deleteById(id);
 		
 		return ResponseEntity.status(HttpStatus.OK).body("cancellato");
+	}
+	
+	@PutMapping("/azienda/{id}")
+	public ResponseEntity<?> update(
+			@PathVariable Long id, 
+			@RequestBody AziendaDtoUpdator aziendaDto
+	){	
+		Azienda a2 = AziendaMapper.convertAziendaDtoToEntity(aziendaDto);
+		
+		Optional<Azienda> optionalAzienda = this.aziendaRepository.findById(id);
+		
+		if (optionalAzienda.isEmpty()) 
+		{
+			//404
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cantiere non trovato");
+		}
+		Azienda azienda=optionalAzienda.get();
+		
+		if(a2.getCodice_ateco()!=null)
+			azienda.setCodice_ateco(a2.getCodice_ateco());
+		if(a2.getEmail()!=null)
+			azienda.setEmail(a2.getEmail());
+		if(a2.getFkCantiere()!=null)
+			azienda.setFkCantiere(a2.getFkCantiere());
+		if(a2.getIndirizzo()!=null)
+			azienda.setIndirizzo(a2.getIndirizzo());
+		if(a2.getMappa()!=null)
+			azienda.setMappa(a2.getMappa());
+		if(a2.getNatura_giuridica()!=null)
+			azienda.setNatura_giuridica(a2.getNatura_giuridica());
+		if(a2.getPiva()!=0)
+			azienda.setPiva(a2.getPiva());
+		if(a2.getRagione_sociale()!=null)
+			azienda.setRagione_sociale(a2.getRagione_sociale());
+		
+		
+		aziendaRepository.save(azienda);
+		
+		return ResponseEntity.status(HttpStatus.OK).body("updated");
 	}
 	
 

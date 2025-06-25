@@ -8,6 +8,7 @@ import DatabaseInsert from "../components/DatabaseInsert"
 function Database() {
     const [data, setData] = useState("");
     const [selection, setSelection] = useState("")
+    const [isEditing, setIsEditing] = useState(false)
 
     // Function to fetch aziende data
     const fetchAziende = () => {
@@ -52,6 +53,10 @@ function Database() {
         }
     }
 
+    const editing = (tat) => {
+        setIsEditing(tat)
+    }
+
     useEffect(() => {
         if (selection == 2) {
             fetchAziende();
@@ -86,16 +91,18 @@ function Database() {
                 </Dropdown.Menu>
             </Dropdown>
             
-            {/* Pass the refresh function to DatabaseInsert */}
-            <DatabaseInsert 
+            {isEditing == false ? (
+                <DatabaseInsert 
                 selection={selection} 
                 onDataInserted={refreshData}
             />
+            ) : (<></>)}
+            
             
             {selection == 2 ? (
-                <DatabaseAzienda data={data} refreshData={refreshData}/>
+                <DatabaseAzienda data={data} refreshData={refreshData} editing ={editing}/>
             ) : (
-                <DatabaseCantiere data={data} />
+                <DatabaseCantiere data={data} refreshData={refreshData} />
             )}
         </>
     );

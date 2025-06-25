@@ -114,11 +114,13 @@ public class CantiereController {
 		return ResponseEntity.status(HttpStatus.OK).body("cancellato");
 	}
 	
-	/*
+	
 	@PutMapping("/cantieri/{id}")
-	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CantiereDtoUpdator cantiereDto){
-		
-		Cantiere cantiere = CantiereMapper.dtoToEntityUpdator(cantiereDto);
+	public ResponseEntity<?> update(
+			@PathVariable Long id, 
+			@RequestBody CantiereDtoUpdator cantiereDto
+	){	
+		Cantiere c2 = CantiereMapper.dtoToEntity(cantiereDto);
 		
 		Optional<Cantiere> optionalCantiere = this.cantiereRepository.findById(id);
 		
@@ -127,7 +129,7 @@ public class CantiereController {
 			//404
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cantiere non trovato");
 		}
-		Cantiere c2=optionalCantiere.get();
+		Cantiere cantiere=optionalCantiere.get();
 		
 		if(c2.getCap()!=0)
 			cantiere.setCap(c2.getCap());
@@ -146,7 +148,7 @@ public class CantiereController {
 		if(c2.getLogo()!=null)
 			cantiere.setLogo(c2.getLogo());
 		if(c2.getNazione()!=null)
-			cantiere.setLogo(c2.getLogo());
+			cantiere.setNazione(c2.getNazione());
 		if(c2.getPdf()!=null)
 			cantiere.setPdf(c2.getPdf());
 		
@@ -154,8 +156,6 @@ public class CantiereController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body("updated");
 	}
-	
-	*/
 	
 	
 	
