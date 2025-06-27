@@ -37,7 +37,7 @@ public class Azienda {
     private String natura_giuridica;
 
     @Column
-    private int piva;
+    private long piva;
 
     @Column
     private String codice_ateco;

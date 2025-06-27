@@ -16,6 +16,8 @@ function DatabaseAzienda(props){
 
     const refresh = () => {
         props.refreshData()
+        setUpdateRow(0)
+        props.editing(0)
     }
 
     const deleteAzienda = (id) =>{

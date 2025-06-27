@@ -13,7 +13,7 @@ public class AziendaDtoUpdator {
 	
 	private String natura_giuridica;
 	
-	private int piva;
+	private long piva;
 	
 	private String codice_ateco;
 	

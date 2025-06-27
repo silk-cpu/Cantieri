@@ -22,7 +22,7 @@ public class AziendaDto {
 	@NotNull
 	private String natura_giuridica;
 	@NotNull
-	private int piva;
+	private long piva;
 	@NotNull
 	private String codice_ateco;
 	@NotNull

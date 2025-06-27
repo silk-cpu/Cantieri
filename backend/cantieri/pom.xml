@@ -97,6 +97,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>cantieri</finalName>
 	</build>
 
 </project>

@@ -1,10 +1,12 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import Dropdown from 'react-bootstrap/Dropdown'
+import DatabaseUpdateCantiere from "./DatabaseUpdateCantiere"
 
 function Cantiere(props){
 
     const[data,setData] = useState([])
+    const [singleData,setSingleData] = useState("")
+    const [updateRow, setUpdateRow] = useState("")
 
     useEffect(()=>{
         console.log("runner: ",props.data)
@@ -24,8 +26,29 @@ function Cantiere(props){
         
     }
 
-    return(<>
-        <table class="table"> 
+    const updateInsertValue = (event, item) => {
+        const tat = swap(event.target.value)
+        console.log("tat", tat)
+        setUpdateRow(tat)
+        props.editing(tat)
+        setSingleData(item)
+    }
+    
+    const swap = (value) => {
+        return value == 1 ? 0 : 1
+        
+    }
+
+    const refresh = () => {
+        props.refreshData()
+        setUpdateRow(0)
+        props.editing(0)
+    }
+
+    return(
+        <>
+        {updateRow==0?(
+            <table class="table"> 
             <thead>
             <tr>
                 <th>id</th>
@@ -53,7 +76,7 @@ function Cantiere(props){
                     <td>{item.nome}</td>
                     <td>{item.committente}</td>
                     <td>{item.cap}</td>
-                    <td>{item.nazioni}</td>
+                    <td>{item.nazione}</td>
                     <td>{item.data_inizio_cantiere}</td>
                     <td>{item.data_fine_cantiere}</td>
                     <td>{item.email}</td>
@@ -61,11 +84,16 @@ function Cantiere(props){
                     <td>{item.pdf}</td>
                     <td>{item.firma}</td>
                     <td><button class="btn btn-danger" value={item.id} onClick={() => deleteCantiere(item.id)}>delete</button></td>
+                    <td><button class="btn btn-warning" onClick={(event) => updateInsertValue(event, item)}> update </button></td>
                 </tr>
                 ))
             )}
             </tbody>
         </table>
+        ):(
+            <DatabaseUpdateCantiere data={singleData} updateInsertValue={updateInsertValue} refresh = {refresh}/>
+        )}
+        
     </>)
 }
 

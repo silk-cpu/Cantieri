@@ -102,7 +102,7 @@ function Database() {
             {selection == 2 ? (
                 <DatabaseAzienda data={data} refreshData={refreshData} editing ={editing}/>
             ) : (
-                <DatabaseCantiere data={data} refreshData={refreshData} />
+                <DatabaseCantiere data={data} refreshData={refreshData} editing={editing}/>
             )}
         </>
     );
