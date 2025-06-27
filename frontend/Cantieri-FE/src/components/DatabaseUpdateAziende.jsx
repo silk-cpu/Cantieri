@@ -23,7 +23,7 @@ function DatabaseUpdateAziende(props){
         console.log(props)
 
         axios
-            .get("http://localhost:8090/cantieri")
+            .get("http://localhost:8091/cantieri")
             .then((response) => {
                 console.log("Response Data:", response.data);
                 
@@ -97,7 +97,7 @@ function DatabaseUpdateAziende(props){
     const sendDataAzienda = () => {
         console.log(item)
         axios
-        .put("http://localhost:8090/azienda/"+props.data.id, item, {
+        .put("http://localhost:8091/azienda/"+props.data.id, item, {
             headers: {
                 'Content-Type': 'application/json',
             }

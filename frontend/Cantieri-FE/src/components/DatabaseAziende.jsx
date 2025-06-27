@@ -22,14 +22,14 @@ function DatabaseAzienda(props){
 
     const deleteAzienda = (id) =>{
         axios
-            .delete("http://localhost:8090/aziende/"+id)
+            .delete("http://localhost:8091/aziende/"+id)
             .then((response)=>{
                 console.log(response)
                 alert("cancellato")
                 props.refreshData()
             })
 
-        console.log("http://localhost:8090/aziende/"+id)
+        console.log("http://localhost:8091/aziende/"+id)
         
     }
 

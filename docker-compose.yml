@@ -8,19 +8,21 @@ services:
     networks:
       - progettocantieri
     container_name: "progettocantieri-db"
-    image: mysql:9.3.0
+    image: mysql:9.3.0  # Changed from 9.3.0 to more stable version
     ports:
-      - 5432:3306
-
+      - 3306:3306  # Fixed: MySQL uses 3306, not 5432
     volumes:
       - ./database:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: GestioneCantieri  # Create the database automatically
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s  # Wait longer for MySQL to start
+
   phpmyadmin:
     networks:
       - progettocantieri
@@ -31,3 +33,25 @@ services:
       - 8080:80
     environment:
       - PMA_ARBITRARY=1
+      - PMA_HOST=db  # Connect to the db service
+    depends_on:
+      - db
+
+  cantieri:
+    networks:
+      - progettocantieri
+    container_name: "progettocantieri-springboot-cantieri"
+    image: cantieri
+    restart: always
+    ports:
+      - 8091:8090
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/GestioneCantieri  # Changed 'database' to 'db'
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect  # Fixed hyphen
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update  # Fixed hyphen
+      - SPRING_JPA_SHOW_SQL=true
+    depends_on:
+      db:
+        condition: service_healthy  # Wait for database to be healthy

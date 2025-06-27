@@ -102,7 +102,7 @@ function DatabaseInsert(props){
         console.log(props)
 
         axios
-            .get("http://localhost:8090/cantieri")
+            .get("http://localhost:8091/cantieri")
             .then((response) => {
                 console.log("Full Response:", response);
                 console.log("Response Data:", response.data);
@@ -192,7 +192,7 @@ function DatabaseInsert(props){
         console.log(data)
         if(selection == 2){
             axios
-            .post("http://localhost:8090/azienda", data, {
+            .post("http://localhost:8091/azienda", data, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -216,7 +216,7 @@ function DatabaseInsert(props){
             });
         }else if(selection == 1){
             axios
-            .post("http://localhost:8090/cantieri", data, {
+            .post("http://localhost:8091/cantieri", data, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -279,7 +279,7 @@ function DatabaseInsert(props){
         // Submit the final object
         console.log("Sending dcantieri:", newDCantieri);
 
-        axios.post("http://localhost:8090/cantieri", newDCantieri, {
+        axios.post("http://localhost:8091/cantieri", newDCantieri, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -310,7 +310,7 @@ function DatabaseInsert(props){
             fk_cantiere: 15
         };
         
-        axios.post("http://localhost:8090/azienda", testData, {
+        axios.post("http://localhost:8091/azienda", testData, {
             headers: {'Content-Type': 'application/json'}
         })
         .then(response => {

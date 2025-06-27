@@ -15,14 +15,14 @@ function Cantiere(props){
 
     const deleteCantiere = (id) =>{
         axios
-            .delete("http://localhost:8090/cantieri/"+id)
+            .delete("http://localhost:8091/cantieri/"+id)
             .then((response)=>{
                 console.log(response)
                 alert("cancellato")
                 props.refreshData()
             })
 
-        console.log("http://localhost:8090/cantieri/"+id)
+        console.log("http://localhost:8091/cantieri/"+id)
         
     }
 

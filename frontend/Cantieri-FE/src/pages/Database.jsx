@@ -13,7 +13,7 @@ function Database() {
     // Function to fetch aziende data
     const fetchAziende = () => {
         axios
-            .get("http://localhost:8090/aziende")
+            .get("http://localhost:8091/aziende")
             .then((response) => {
                 if (response.data) {
                     setData(response.data);
@@ -29,7 +29,7 @@ function Database() {
     // Function to fetch cantieri data
     const fetchCantieri = () => {
         axios
-            .get("http://localhost:8090/cantieri")
+            .get("http://localhost:8091/cantieri")
             .then((response) => {
                 console.log("Full Response:", response);
                 console.log("Response Data:", response.data);

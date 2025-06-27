@@ -125,7 +125,7 @@ function DatabaseUpdateCantiere(props){
         // Submit the final object
         console.log("Sending dcantieri:", newDCantieri);
 
-        axios.put("http://localhost:8090/cantieri/"+data.id, newDCantieri, {
+        axios.put("http://localhost:8091/cantieri/"+data.id, newDCantieri, {
             headers: {
                 "Content-Type": "application/json",
             },
