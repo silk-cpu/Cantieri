@@ -1,0 +1,14 @@
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\CantieriApplication.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\controller\AziendaController.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\controller\CantiereController.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\CorsConfig\CorsConfig.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\dto\AziendaDto.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\dto\AziendaDtoUpdator.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\dto\CantiereDto.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\dto\CantiereDtoUpdator.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\entities\Azienda.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\entities\Cantiere.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\mapper\AziendaMapper.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\mapper\CantiereMapper.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\repositories\AziendaRepository.java
+C:\Users\SebastianGeraldMay\Desktop\GestioneCantieri\Cantieri\backend\cantieri\src\main\java\it\fila1\cantieri\repositories\CantiereRepository.java
