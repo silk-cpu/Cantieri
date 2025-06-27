@@ -1,14 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DatabaseCantiere from '../components/DatabaseCantiere';
 import DatabaseAzienda from "../components/DatabaseAziende";
-import DatabaseInsert from "../components/DatabaseInsert"
+import DatabaseInsertCantiere from "../components/DatabaseInsertCantiere"
+import DatabaseInsertAzienda from "../components/DatabaseInsertAzienda"
 
-function Database() {
+function Database(props) {
     const [data, setData] = useState("");
     const [selection, setSelection] = useState("")
     const [isEditing, setIsEditing] = useState(false)
+    const navigate = useNavigate();
 
     // Function to fetch aziende data
     const fetchAziende = () => {
@@ -62,7 +65,7 @@ function Database() {
             fetchAziende();
         } else if (selection == 1) {
             fetchCantieri();
-        }else{
+        } else {
             fetchCantieri();
         }
     }, [selection]);
@@ -74,35 +77,42 @@ function Database() {
         }
     }, [data]);
 
-    function setTable(value) {
-        console.log("value", value)
-        setSelection(value)
+    function setTable(event) {
+        const selectedValue = event.target.value;
+        console.log("Selected Value:", selectedValue);
+        setSelection(selectedValue);
+    }
+
+    function setEditingValue(event) {
+        const value = event.target.value;
+        setIsEditing(true);
+        props.insertForm(value);
+        
+        // Navigate to the appropriate route
+        if (value == "2") {
+            navigate('/aziende/insert');
+        } else if (value == "1") {
+            navigate('/cantiere/insert');
+        }
     }
 
     return (
         <>
-            <Dropdown>
-                <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    Dropdown Button
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => setTable(1)}>Cantieri</Dropdown.Item>
-                    <Dropdown.Item onClick={() => setTable(2)}>Aziende</Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
-            
-            {isEditing == false ? (
-                <DatabaseInsert 
-                selection={selection} 
-                onDataInserted={refreshData}
-            />
-            ) : (<></>)}
-            
+            <select onChange={setTable}>
+                <option value={1}>Cantieri</option>
+                <option value={2}>Aziende</option>
+            </select>
             
             {selection == 2 ? (
-                <DatabaseAzienda data={data} refreshData={refreshData} editing ={editing}/>
+                <>
+                    <button value={2} onClick={setEditingValue}>Aggiungi</button>
+                    <DatabaseAzienda data={data} refreshData={refreshData} editing={editing}/>
+                </>
             ) : (
-                <DatabaseCantiere data={data} refreshData={refreshData} editing={editing}/>
+                <>
+                    <button value={1} onClick={setEditingValue}>Aggiungi</button>
+                    <DatabaseCantiere data={data} refreshData={refreshData} editing={editing}/>
+                </>
             )}
         </>
     );

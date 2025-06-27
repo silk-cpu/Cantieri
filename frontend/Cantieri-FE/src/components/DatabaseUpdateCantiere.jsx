@@ -112,6 +112,32 @@ function DatabaseUpdateCantiere(props){
             }
         };
 
+         // Fixed delete function - should delete by filename, not upload a file
+        const deleteFile = async (filename, endpoint, fieldName) => {
+            if (!filename) return null;
+
+            try {
+                const response = await axios.delete(`http://localhost:8000/${endpoint}/${filename}`);
+                console.log(`${fieldName} deleted:`, response.data);
+                return true;
+            } catch (error) {
+                console.error(`Error deleting ${fieldName}:`, error);
+                // Don't alert on delete errors, they might not exist
+                return false;
+            }
+        };
+
+        // Delete old files if they exist (using existing filenames from data)
+        if( fileLogo != null){
+            await deleteFile(data.logo.split('/').pop(), "deleteLogo", "logo");
+        }
+        if( fileFirma != null){
+            await deleteFile(data.firma.split('/').pop(), "deleteFirma", "firma");
+        }
+        if( filePDF != null){
+            await deleteFile(data.pdf.split('/').pop(), "deletePdf", "pdf");
+        }
+
         // Upload files and collect file paths
         const logoPath = await uploadFile(fileLogo, "uploadLogo", "logo");
         const pdfPath = await uploadFile(filePDF, "uploadPdf", "pdf");

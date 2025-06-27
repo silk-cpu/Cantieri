@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
@@ -6,9 +6,10 @@ import os
 app = FastAPI()
 
 # Enable CORS for React frontend (e.g., http://localhost:3000)
+# This is the corrected code
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Update this as needed
+    allow_origins=["http://localhost:3000", "http://localhost:5173"], # ✅ I've added your React app's origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,3 +43,40 @@ async def upload_file(file: UploadFile = File(...)):
     with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     return {file.filename}
+
+
+
+@app.delete("/deleteLogo/")
+async def delete_file(filename: str):
+    file_location = f"{UPLOAD_DIR_LOGO}/{filename}"
+    try:
+        if os.path.exists(file_location):
+            os.remove(file_location)
+        else:
+            raise HTTPException(status_code=404,detail="File not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting file: {e}")
+
+@app.delete("/deletePdf/{filename}")
+async def delete_pdf(filename: str):
+    file_location = f"{UPLOAD_DIR_PDF}/{filename}"
+    try:
+        if os.path.exists(file_location):
+            os.remove(file_location)
+            return {"message": f"PDF {filename} deleted successfully"}
+        else:
+            raise HTTPException(status_code=404, detail="File not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting file: {e}")
+
+@app.delete("/deleteFirma/{filename}")
+async def delete_firma(filename: str):
+    file_location = f"{UPLOAD_DIR_FIRMA}/{filename}"
+    try:
+        if os.path.exists(file_location):
+            os.remove(file_location)
+            return {"message": f"Firma {filename} deleted successfully"}
+        else:
+            raise HTTPException(status_code=404, detail="File not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting file: {e}")
