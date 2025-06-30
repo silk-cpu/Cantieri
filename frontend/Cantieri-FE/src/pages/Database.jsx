@@ -9,8 +9,8 @@ import DatabaseInsertAzienda from "../components/DatabaseInsertAzienda"
 
 function Database(props) {
     const [data, setData] = useState("");
-    const [selection, setSelection] = useState("")
-    const [isEditing, setIsEditing] = useState(false)
+    const [selection, setSelection] = useState("1");
+    const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
 
     // Function to fetch aziende data
@@ -97,25 +97,75 @@ function Database(props) {
     }
 
     return (
-        <>
-            <select onChange={setTable}>
-                <option value={1}>Cantieri</option>
-                <option value={2}>Aziende</option>
-            </select>
-            
-            {selection == 2 ? (
-                <>
-                    <button value={2} onClick={setEditingValue}>Aggiungi</button>
-                    <DatabaseAzienda data={data} refreshData={refreshData} editing={editing}/>
-                </>
-            ) : (
-                <>
-                    <button value={1} onClick={setEditingValue}>Aggiungi</button>
-                    <DatabaseCantiere data={data} refreshData={refreshData} editing={editing}/>
-                </>
-            )}
-        </>
+        <div className="container-fluid mt-4">
+            <div className="row">
+                {/* Sidebar Controls */}
+                <div className="col-md-3 col-lg-2 mb-4">
+                    <div className="card shadow h-100">
+                        <div className="card-header bg-primary text-white py-2">
+                            <h6 className="mb-0">
+                                <i className="fas fa-cogs me-2"></i>
+                                Controlli
+                            </h6>
+                        </div>
+                        <div className="card-body">
+                            <div className="mb-3">
+                                <label htmlFor="tableSelect" className="form-label fw-bold small">
+                                    Tabella
+                                </label>
+                                <select 
+                                    id="tableSelect"
+                                    className="form-select"
+                                    value={selection}
+                                    onChange={setTable}
+                                >
+                                    <option value={1}>Cantieri</option>
+                                    <option value={2}>Aziende</option>
+                                </select>
+                            </div>
+                            <div className="d-grid">
+                                <button 
+                                    className="btn btn-success"
+                                    value={selection}
+                                    onClick={setEditingValue}
+                                >
+                                    <i className="fas fa-plus me-2"></i>
+                                    Aggiungi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Table Area */}
+                <div className="col-md-9 col-lg-10">
+                    <div className="card shadow">
+                        <div className="card-header bg-light">
+                            <h5 className="mb-0 text-muted">
+                                <i className={`fas ${selection == 2 ? 'fa-industry' : 'fa-building'} me-2`}></i>
+                                {selection == 2 ? 'Elenco Aziende' : 'Elenco Cantieri'}
+                            </h5>
+                        </div>
+                        <div className="card-body p-0">
+                            {selection == 2 ? (
+                                <DatabaseAzienda 
+                                    data={data} 
+                                    refreshData={refreshData} 
+                                    editing={editing}
+                                />
+                            ) : (
+                                <DatabaseCantiere 
+                                    data={data} 
+                                    refreshData={refreshData} 
+                                    editing={editing}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }
 
-export default Database
+export default Database;

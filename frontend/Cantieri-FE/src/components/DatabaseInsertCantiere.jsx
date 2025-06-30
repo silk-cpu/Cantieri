@@ -125,7 +125,8 @@ function DatabaseInsert(props){
         })
         .then((response) => {
             console.log("Cantiere inserted:", response.data);
-            alert("Cantiere inserito con successo!");
+            props.insertForm(0)
+            navigate("/link");
         })
         .catch((error) => {
             console.error("Error posting cantiere:", error);

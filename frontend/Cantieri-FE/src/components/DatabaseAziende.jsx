@@ -25,7 +25,6 @@ function DatabaseAzienda(props){
             .delete("http://localhost:8091/aziende/"+id)
             .then((response)=>{
                 console.log(response)
-                alert("cancellato")
                 props.refreshData()
             })
 
@@ -91,6 +90,12 @@ return (
                                                 <i className="fas fa-map-marker-alt me-1"></i>Indirizzo
                                             </th>
                                             <th scope="col">
+                                                <i className="fas fa-map-marker-alt me-1"></i>Citta
+                                            </th>
+                                            <th scope="col">
+                                                <i className="fas fa-map-marker-alt me-1"></i>Stato
+                                            </th>
+                                            <th scope="col">
                                                 <i className="fas fa-map me-1"></i>Mappa
                                             </th>
                                             <th scope="col">
@@ -127,15 +132,13 @@ return (
                                                     </small>
                                                 </td>
                                                 <td>
-                                                    {item.mappa ? (
-                                                        <span className="badge bg-success">
-                                                            <i className="fas fa-check me-1"></i>Presente
-                                                        </span>
-                                                    ) : (
-                                                        <span className="badge bg-secondary">
-                                                            <i className="fas fa-times me-1"></i>Assente
-                                                        </span>
-                                                    )}
+                                                    <small className = "text-primary">{item.citta}</small>
+                                                </td>
+                                                <td>
+                                                    <small className = "text-primary">{item.stato}</small>
+                                                </td>
+                                                <td>
+                                                    <small className = "text-primary">{item.mappa}</small>
                                                 </td>
                                                 <td>
                                                     <small className="text-primary">{item.email}</small>

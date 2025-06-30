@@ -73,13 +73,6 @@ function DatabaseUpdateAziende(props){
         })
     }
     
-    const setMappa = (event) => {
-        setItem({
-            ...item,
-            mappa: event.target.value
-        })
-    }
-    
     const setEmail = (event) => {
         setItem({
             ...item,
@@ -119,41 +112,128 @@ function DatabaseUpdateAziende(props){
         });
     }
 
-    return(
-        <>
-            <br/>
-                <table>
-                    <tr>
-                        <th><input type="text" placeholder="ragione_sociale" value={item.ragione_sociale} onChange={setRagioneSociale}/></th>
-                        <th>
-                            <select value={item.natura_giuridica} onChange={setNatura_giuridica}>
-                                <option value="">Select an option</option>
-                                <option value="societa">societa</option>
-                                <option value="ditta individuale">ditta individuale</option>
-                            </select>
-                        </th>
-                        <th><input type="number" placeholder="piva" value={item.piva} onChange={setPIva}/></th>
-                        <th><input type="text" placeholder="codice_ateco" value={item.codice_ateco} onChange={setCodice_ateco}/></th>
-                        <th><input type="text" placeholder="indirizzo" value={item.indirizzo} onChange={setIndirizzo}/></th>
-                        <th><input type="text" placeholder="mappa" value={item.mappa} onChange={setMappa}/></th>
-                        <th><input type="text" placeholder="email" value={item.email} onChange={setEmail}/></th>
-                        <th>
-                            <select value={item.fk_cantiere} onChange={setFkCantieri}>
-                                    <option value="">Select an option</option>
-                                    {
-                                        dataCantieri.map((singleitem, index) => (
-                                            <option key={index} value={singleitem.id}>{singleitem.id}</option>
-                                        ))      
-                                    }
-                            </select>
-                        </th>
-                        
-                        <th>&nbsp;&nbsp;&nbsp;</th>
-                        <button className="btn btn-primary" onClick={sendDataAzienda}>inserisci</button>
-                    </tr>
-                </table>
-            <br/>
-        </>)
+    return (
+    <div className="container-fluid mt-3">
+        <div className="card shadow">
+            <div className="card-header bg-warning text-dark">
+                <h5 className="mb-0">
+                    <i className="fas fa-edit me-2"></i>
+                    Aggiorna Azienda
+                </h5>
+            </div>
+            <div className="card-body">
+                <div className="row g-3 align-items-end">
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Ragione Sociale</label>
+                        <input 
+                            type="text" 
+                            className="form-control form-control-sm" 
+                            placeholder="Ragione sociale" 
+                            value={item.ragione_sociale} 
+                            onChange={setRagioneSociale}
+                        />
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <label className="form-label fw-bold small">Natura</label>
+                        <select 
+                            className="form-select form-select-sm" 
+                            value={item.natura_giuridica} 
+                            onChange={setNatura_giuridica}
+                        >
+                            <option value="">Seleziona</option>
+                            <option value="societa">Società</option>
+                            <option value="ditta individuale">Ditta Ind.</option>
+                        </select>
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <label className="form-label fw-bold small">P.IVA</label>
+                        <input 
+                            type="number" 
+                            className="form-control form-control-sm" 
+                            placeholder="P.IVA" 
+                            value={item.piva} 
+                            onChange={setPIva}
+                        />
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <label className="form-label fw-bold small">ATECO</label>
+                        <input 
+                            type="text" 
+                            className="form-control form-control-sm" 
+                            placeholder="ATECO" 
+                            value={item.codice_ateco} 
+                            onChange={setCodice_ateco}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Indirizzo</label>
+                        <input 
+                            type="text" 
+                            className="form-control form-control-sm" 
+                            placeholder="Via, Numero" 
+                            value={item.indirizzo} 
+                            onChange={setIndirizzo}
+                        />
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <label className="form-label fw-bold small">Mappa</label>
+                        <input 
+                            type="text" 
+                            className="form-control form-control-sm" 
+                            placeholder="GPS" 
+                            value={item.mappa} 
+                            readOnly
+                            style={{backgroundColor: '#f8f9fa'}}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Email</label>
+                        <input 
+                            type="email" 
+                            className="form-control form-control-sm" 
+                            placeholder="email@esempio.com" 
+                            value={item.email} 
+                            onChange={setEmail}
+                        />
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <label className="form-label fw-bold small">Cantiere</label>
+                        <select 
+                            className="form-select form-select-sm" 
+                            value={item.fk_cantiere} 
+                            onChange={setFkCantieri}
+                        >
+                            <option value="">Seleziona</option>
+                            {dataCantieri.map((singleitem, index) => (
+                                <option key={index} value={singleitem.id}>
+                                    #{singleitem.id}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <button 
+                            type="button"
+                            className="btn btn-warning btn-sm w-100" 
+                            onClick={sendDataAzienda}
+                        >
+                            <i className="fas fa-sync-alt me-1"></i>
+                            Aggiorna
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+)
 }
 
 export default DatabaseUpdateAziende

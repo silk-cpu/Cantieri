@@ -167,32 +167,142 @@ function DatabaseUpdateCantiere(props){
         });
     };
     
-    return(<>
-        <br/>
-        <table>
-            <tr>
-                <th><input style={{width: 150 + 'px'}} type="text" value={data.nome} placeholder="nome" onChange={handleNome}/></th>
-                <th><input style={{width: 150 + 'px'}} type="text" placeholder="committente" value={data.committente} onChange={handleComittente}/></th>
-                <th><input style={{width: 100 + 'px'}} type="number" placeholder="cap" value={data.cap} onChange={handleCap}/></th>
-                <select style={{width: 150 + 'px'}} value={data.nazione} onChange={handleNazione}>
-                    <option value=""></option>
-                    {
-                        nazioni.map((nazione,index) => (
-                        <option value={nazione.name} key={index}>{nazione.name}</option>
-                    ))}
-                </select>
-                <th><input style={{width: 150 + 'px'}} type="date" placeholder="data_inizio_cantiere" value={data.data_inizio_cantiere}  onChange={handleDIC}/></th>
-                <th><input style={{width: 150 + 'px'}} type="date" placeholder="data_fine_cantiere" value={data.data_fine_cantiere}  onChange={handleDFC}/></th>
-                <th><input style={{width: 200 + 'px'}} type="text" placeholder="email" value={data.email} onChange={handleEmail}/></th>
-                <th><input style={{width: 200 + 'px'}} type="file" placeholder="logo" onChange={handleFileChangeLogo}/></th>
-                <th><input style={{width: 200 + 'px'}} type="file" placeholder="pdf" onChange={handleFileChangePDF}/></th>
-                <th><input style={{width: 200 + 'px'}} type="file" placeholder="firma" onChange={handleFileChangeFirma}/></th>
-                <th>&nbsp;&nbsp;&nbsp;</th>
-                <button className="btn btn-primary" onClick={sendDataCantiere}>inserisci</button>
-            </tr>
-        </table>
-        <br/>
-    </>)
+    return (
+    <div className="container-fluid mt-3">
+        <div className="card shadow">
+            <div className="card-header bg-warning text-dark">
+                <h5 className="mb-0">
+                    <i className="fas fa-plus-circle me-2"></i>
+                    Nuovo Cantiere
+                </h5>
+            </div>
+            <div className="card-body">
+                <div className="row g-3 align-items-end">
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Nome</label>
+                        <input 
+                            type="text" 
+                            className="form-control form-control-sm" 
+                            placeholder="Nome cantiere" 
+                            value={data.nome} 
+                            onChange={handleNome}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Committente</label>
+                        <input 
+                            type="text" 
+                            className="form-control form-control-sm" 
+                            placeholder="Nome committente" 
+                            value={data.committente} 
+                            onChange={handleComittente}
+                        />
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <label className="form-label fw-bold small">CAP</label>
+                        <input 
+                            type="number" 
+                            className="form-control form-control-sm" 
+                            placeholder="CAP" 
+                            value={data.cap} 
+                            onChange={handleCap}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Nazione</label>
+                        <select 
+                            className="form-select form-select-sm" 
+                            value={data.nazione} 
+                            onChange={handleNazione}
+                        >
+                            <option value="">Seleziona nazione</option>
+                            {nazioni.map((nazione, index) => (
+                                <option value={nazione.name} key={index}>
+                                    {nazione.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Data Inizio</label>
+                        <input 
+                            type="date" 
+                            className="form-control form-control-sm" 
+                            value={data.data_inizio_cantiere} 
+                            onChange={handleDIC}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Data Fine</label>
+                        <input 
+                            type="date" 
+                            className="form-control form-control-sm" 
+                            value={data.data_fine_cantiere} 
+                            onChange={handleDFC}
+                        />
+                    </div>
+                    
+                    <div className="col-md-3">
+                        <label className="form-label fw-bold small">Email</label>
+                        <input 
+                            type="email" 
+                            className="form-control form-control-sm" 
+                            placeholder="email@esempio.com" 
+                            value={data.email} 
+                            onChange={handleEmail}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Logo</label>
+                        <input 
+                            type="file" 
+                            className="form-control form-control-sm" 
+                            accept="image/*"
+                            onChange={handleFileChangeLogo}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">PDF</label>
+                        <input 
+                            type="file" 
+                            className="form-control form-control-sm" 
+                            accept=".pdf"
+                            onChange={handleFileChangePDF}
+                        />
+                    </div>
+                    
+                    <div className="col-md-2">
+                        <label className="form-label fw-bold small">Firma</label>
+                        <input 
+                            type="file" 
+                            className="form-control form-control-sm" 
+                            accept="image/*"
+                            onChange={handleFileChangeFirma}
+                        />
+                    </div>
+                    
+                    <div className="col-md-1">
+                        <button 
+                            type="button"
+                            className="btn btn-warning btn-sm w-100" 
+                            onClick={sendDataCantiere}
+                        >
+                            <i className="fas fa-plus me-1"></i>
+                            Inserisci
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+)
 }
 
 export default DatabaseUpdateCantiere

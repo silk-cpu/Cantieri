@@ -1,5 +1,0 @@
-package it.fila1.cantieri.repositories;
-
-public interface CantiereRepository {
-
-}
