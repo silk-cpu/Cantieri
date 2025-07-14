@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Jun 30, 2025 at 11:55 AM
--- Server version: 9.3.0
--- PHP Version: 8.2.28
+-- Creato il: Lug 14, 2025 alle 14:55
+-- Versione del server: 9.3.0
+-- Versione PHP: 8.2.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aziende`
+-- Struttura della tabella `aziende`
 --
 
 CREATE TABLE `aziende` (
@@ -45,18 +45,17 @@ CREATE TABLE `aziende` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `aziende`
+-- Dump dei dati per la tabella `aziende`
 --
 
 INSERT INTO `aziende` (`id`, `ragione_sociale`, `natura_giuridica`, `piva`, `codice_ateco`, `indirizzo`, `citta`, `stato`, `mappa`, `email`, `fk_cantiere`, `note`, `created_at`, `updated_at`) VALUES
 (4, 'ta', 'ditta individuale', 12, 'tata', 'Via Roma 1', '', '', '45.5238232 9.3300742', 'gg', 1, NULL, '2025-06-28 14:49:52', '2025-06-29 10:27:58'),
-(7, 'tat', 'societa', 1234, 'tat', 'Via Taddeo Landini 14', 'Montelupo Fiorentino', 'Toscana', 'Lat: 0.0 Long: 0.0', 'tat', 1, NULL, '2025-06-28 16:39:44', '2025-06-28 16:39:44'),
 (8, 'test', 'ditta individuale', 23, 'test', 'Via Giuseppe Verdi', 'Milano', 'Lombardia', 'Lat: 45.4688097 Long: 9.1884152', 'test', 1, NULL, '2025-06-29 10:15:45', '2025-06-29 10:15:45');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cantieri`
+-- Struttura della tabella `cantieri`
 --
 
 CREATE TABLE `cantieri` (
@@ -77,7 +76,7 @@ CREATE TABLE `cantieri` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `cantieri`
+-- Dump dei dati per la tabella `cantieri`
 --
 
 INSERT INTO `cantieri` (`id`, `nome`, `committente`, `cap`, `nazione`, `data_inizio_cantiere`, `data_fine_cantiere`, `email`, `logo`, `pdf`, `firma`, `note`, `created_at`, `updated_at`) VALUES
@@ -88,7 +87,7 @@ INSERT INTO `cantieri` (`id`, `nome`, `committente`, `cap`, `nazione`, `data_ini
 -- --------------------------------------------------------
 
 --
--- Table structure for table `credenziali`
+-- Struttura della tabella `credenziali`
 --
 
 CREATE TABLE `credenziali` (
@@ -98,66 +97,112 @@ CREATE TABLE `credenziali` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `credenziali`
+-- Dump dei dati per la tabella `credenziali`
 --
 
 INSERT INTO `credenziali` (`idC`, `user`, `password`) VALUES
 (1, 'admin', 'admin');
 
+-- --------------------------------------------------------
+
 --
--- Indexes for dumped tables
+-- Struttura della tabella `dipendenti`
+--
+
+CREATE TABLE `dipendenti` (
+  `id` bigint NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `cognome` varchar(255) NOT NULL,
+  `data_nascita` date NOT NULL,
+  `nazionalita` varchar(255) NOT NULL,
+  `codice_fiscale` varchar(255) NOT NULL,
+  `sesso` enum('M','F') NOT NULL,
+  `fk_azienda` bigint NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `notes` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dump dei dati per la tabella `dipendenti`
+--
+
+INSERT INTO `dipendenti` (`id`, `nome`, `cognome`, `data_nascita`, `nazionalita`, `codice_fiscale`, `sesso`, `fk_azienda`, `created_at`, `updated_at`, `notes`) VALUES
+(2, 'Sebastian', 'May', '2005-09-17', 'Italiano', 'test', 'F', 4, '2025-07-14 10:01:54', '2025-07-14 10:38:16', NULL);
+
+--
+-- Indici per le tabelle scaricate
 --
 
 --
--- Indexes for table `aziende`
+-- Indici per le tabelle `aziende`
 --
 ALTER TABLE `aziende`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_cantiere` (`fk_cantiere`);
 
 --
--- Indexes for table `cantieri`
+-- Indici per le tabelle `cantieri`
 --
 ALTER TABLE `cantieri`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `credenziali`
+-- Indici per le tabelle `credenziali`
 --
 ALTER TABLE `credenziali`
   ADD PRIMARY KEY (`idC`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indici per le tabelle `dipendenti`
+--
+ALTER TABLE `dipendenti`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_azienda` (`fk_azienda`);
+
+--
+-- AUTO_INCREMENT per le tabelle scaricate
 --
 
 --
--- AUTO_INCREMENT for table `aziende`
+-- AUTO_INCREMENT per la tabella `aziende`
 --
 ALTER TABLE `aziende`
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `cantieri`
+-- AUTO_INCREMENT per la tabella `cantieri`
 --
 ALTER TABLE `cantieri`
   MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `credenziali`
+-- AUTO_INCREMENT per la tabella `credenziali`
 --
 ALTER TABLE `credenziali`
   MODIFY `idC` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT per la tabella `dipendenti`
+--
+ALTER TABLE `dipendenti`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Limiti per le tabelle scaricate
 --
 
 --
--- Constraints for table `aziende`
+-- Limiti per la tabella `aziende`
 --
 ALTER TABLE `aziende`
   ADD CONSTRAINT `aziende_ibfk_1` FOREIGN KEY (`fk_cantiere`) REFERENCES `cantieri` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `dipendenti`
+--
+ALTER TABLE `dipendenti`
+  ADD CONSTRAINT `dipendenti_ibfk_1` FOREIGN KEY (`fk_azienda`) REFERENCES `aziende` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
