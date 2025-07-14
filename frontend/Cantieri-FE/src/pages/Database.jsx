@@ -6,6 +6,7 @@ import DatabaseCantiere from '../components/DatabaseCantiere';
 import DatabaseAzienda from "../components/DatabaseAziende";
 import DatabaseInsertCantiere from "../components/DatabaseInsertCantiere"
 import DatabaseInsertAzienda from "../components/DatabaseInsertAzienda"
+import DatabaseDipendenti from "../components/DatabaseDipendenti"
 
 function Database(props) {
     const [data, setData] = useState("");
@@ -47,9 +48,29 @@ function Database(props) {
             });
     }
 
+    // Function to fetch cantieri data
+    const fetchDipendenti = () => {
+        axios
+            .get("http://localhost:8091/dipendenti")
+            .then((response) => {
+                console.log("Full Response:", response);
+                console.log("Response Data:", response.data);
+                if (response.data) {
+                    setData(response.data);
+                } else {
+                    console.log("API returned empty data.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching cantieri:", error);
+            });
+    }
+
     // Function to refresh data based on current selection
     const refreshData = () => {
-        if (selection == 2) {
+        if (selection == 3){
+            fetchDipendenti()
+        } else if (selection == 2) {
             fetchAziende();
         } else if (selection == 1) {
             fetchCantieri();
@@ -61,7 +82,9 @@ function Database(props) {
     }
 
     useEffect(() => {
-        if (selection == 2) {
+        if(selection == 3){
+            fetchDipendenti()
+        } else if (selection == 2) {
             fetchAziende();
         } else if (selection == 1) {
             fetchCantieri();
@@ -121,6 +144,7 @@ function Database(props) {
                                 >
                                     <option value={1}>Cantieri</option>
                                     <option value={2}>Aziende</option>
+                                    <option value={3}>Dipendenti</option>
                                 </select>
                             </div>
                             <div className="d-grid">
@@ -153,12 +177,20 @@ function Database(props) {
                                     refreshData={refreshData} 
                                     editing={editing}
                                 />
-                            ) : (
-                                <DatabaseCantiere 
+                            ) : (selection == 1?(
+                                    <DatabaseCantiere 
+                                        data={data} 
+                                        refreshData={refreshData} 
+                                        editing={editing}
+                                    />
+                                ):(
+                                    <DatabaseDipendenti 
                                     data={data} 
                                     refreshData={refreshData} 
                                     editing={editing}
-                                />
+                                    />
+
+                                )
                             )}
                         </div>
                     </div>

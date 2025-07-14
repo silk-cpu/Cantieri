@@ -12,11 +12,14 @@ import it.fila1.cantieri.dto.AziendaDtoUpdator;
 import it.fila1.cantieri.dto.Coordinates;
 import it.fila1.cantieri.entities.Azienda;
 import it.fila1.cantieri.entities.Cantiere;
+import it.fila1.cantieri.entities.Dipendenti;
 import it.fila1.cantieri.mapper.AziendaMapper;
 import it.fila1.cantieri.repositories.AziendaRepository;
 import it.fila1.cantieri.repositories.CantiereRepository;
 import it.fila1.cantieri.services.GeocodingService;
+import jakarta.transaction.Transactional;
 
+@Transactional
 @RestController
 public class AziendaController {
 
@@ -67,8 +70,25 @@ public class AziendaController {
                 Coordinates coords = geocodingService.geocodeStructured(street, city, state, null, country);
                 azienda.setMappa("Lat: "+coords.getLat() + " Long: " + coords.getLon());
             }
+            
+            if(azienda.getDipendenti()!=null) {
+            	System.out.println("numero dipendenti per azienda: "+azienda.getDipendenti().size());
+            	for(Dipendenti dp : azienda.getDipendenti())
+            		System.out.println("Dipendenti Aziende reference set"+(dp.getAzienda()!=null));
+            }
 
-            aziendaRepository.save(azienda);
+            Azienda saveAzienda = aziendaRepository.save(azienda);
+            
+            System.out.println("Saved cantiere with ID: " + saveAzienda.getId());
+	        
+	        // Debug: Check if aziende were saved with FK
+	        if (saveAzienda.getDipendenti() != null) {
+	            for (Dipendenti dp : saveAzienda.getDipendenti()) {
+	                System.out.println("Saved dipendenti ID: " + dp.getId() + ", FK: " + 
+	                    (dp.getAzienda() != null ? dp.getAzienda().getId() : "NULL"));
+	            }
+	        }
+	        
             return ResponseEntity.ok("Azienda creata con successo");
 
         } catch (Exception e) {

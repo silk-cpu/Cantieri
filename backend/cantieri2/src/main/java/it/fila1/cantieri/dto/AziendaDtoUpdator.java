@@ -1,5 +1,8 @@
 package it.fila1.cantieri.dto;
 
+import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,5 +33,7 @@ public class AziendaDtoUpdator {
 	private String email;
 	
 	private Long fk_cantiere;
+	
+	private List<DipendentiDto> dipendenti;
 
 }

@@ -2,6 +2,7 @@ package it.fila1.cantieri.dto;
 
 import java.util.List;
 
+import it.fila1.cantieri.entities.Dipendenti;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,5 +37,7 @@ public class AziendaDto {
 	private String email;
 	@NotNull
 	private Long fk_cantiere;
+	@NotNull
+	List<DipendentiDto> dipendenti;
 		
 }
