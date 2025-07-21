@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar"
 import Database from "./pages/Database"
 import DatabaseInsertCantiere from "./components/DatabaseInsertCantiere"
 import DatabaseInsertAzienda from "./components/DatabaseInsertAzienda"
+import DatabaseInsertDipendente from "./components/DatabaseInsertDipendenti"
 import Login from "./pages/Login"
 import { useState } from "react"
 
@@ -57,6 +58,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <DatabaseInsertAzienda insertForm={insertForm}/>
+                        </ProtectedRoute>
+                    }
+                />
+                <Route 
+                    path="/dipendenti/insert" 
+                    element={
+                        <ProtectedRoute>
+                            <DatabaseInsertDipendente insertForm={insertForm}/>
                         </ProtectedRoute>
                     }
                 />

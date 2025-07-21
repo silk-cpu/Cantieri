@@ -1,11 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import Dropdown from 'react-bootstrap/Dropdown';
 import DatabaseCantiere from '../components/DatabaseCantiere';
 import DatabaseAzienda from "../components/DatabaseAziende";
-import DatabaseInsertCantiere from "../components/DatabaseInsertCantiere"
-import DatabaseInsertAzienda from "../components/DatabaseInsertAzienda"
 import DatabaseDipendenti from "../components/DatabaseDipendenti"
 
 function Database(props) {
@@ -116,6 +113,8 @@ function Database(props) {
             navigate('/aziende/insert');
         } else if (value == "1") {
             navigate('/cantiere/insert');
+        } else if (value == "3") {
+            navigate('/dipendenti/insert');
         }
     }
 

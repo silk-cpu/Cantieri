@@ -71,6 +71,12 @@ function Navbar(props) {
                                                     Nuova Azienda
                                                 </Link>
                                             </li>
+                                            <li>
+                                                <Link className="dropdown-item" to="/dipendenti/insert">
+                                                    <i className="fas fa-building me-2"></i>
+                                                    Nuova Azienda
+                                                </Link>
+                                            </li>
                                         </ul>
                                     </li>
                                 </ul>

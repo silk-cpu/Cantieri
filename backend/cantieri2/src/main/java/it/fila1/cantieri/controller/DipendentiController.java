@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,12 +48,21 @@ public class DipendentiController {
 	
 	@PostMapping("/dipendenti")
 	public ResponseEntity<?> setDipendenti(@RequestBody DipendentiDto dipendentiDto) {
-		
-		Dipendenti dipendenti = DipendentiMapper.dtoToEntity(dipendentiDto);
-		
-		this.dipedenteRepository.save(dipendenti);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(dipendenti);
+	    if (dipendentiDto.getFkAzienda() == null) {
+	        return ResponseEntity.badRequest().body("fkAzienda must not be null");
+	    }
+
+	    Optional<Azienda> aziendaOptional = this.aziendaRepository.findById(dipendentiDto.getFkAzienda());
+	    if (aziendaOptional.isEmpty()) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Azienda not found");
+	    }
+
+	    Azienda azienda = aziendaOptional.get();
+
+	    Dipendenti dipendenti = DipendentiMapper.dtoToEntity(dipendentiDto, azienda); // use correct method
+	    this.dipedenteRepository.save(dipendenti);
+
+	    return ResponseEntity.status(HttpStatus.CREATED).body(dipendenti);
 	}
 	
 	@PutMapping("/dipendenti/{id}")
@@ -76,6 +86,19 @@ public class DipendentiController {
                     return ResponseEntity.ok("Dipendente aggiornato");
 				})
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).body("Dipendente non trovato"));
+	}
+	
+	@DeleteMapping("/dipendenti/{id}")
+	public ResponseEntity<?> deleteDipendenti(@PathVariable Long id){
+		
+		Optional<Dipendenti> dipendenteOptional = this.dipedenteRepository.findById(id);
+		Dipendenti dipendente = dipendenteOptional.get();
+		if(dipendente == null)
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("dipendente non trovato");
+		
+		this.dipedenteRepository.deleteById(id);
+		
+		return ResponseEntity.status(HttpStatus.OK).body("dipendente rimosso");
 	}
 
 }

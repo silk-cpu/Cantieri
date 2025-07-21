@@ -1,22 +1,30 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react"
+import axios from "axios"
+import DatabaseUpdateDipendente from "./DatabaseUpdateDipendente"
 
 function Dipendenti(props){
 
-    const[data,setData] = useState([])
+    const [data,setData] = useState([])
     const [singleData,setSingleData] = useState("")
     const [updateRow, setUpdateRow] = useState("")
 
     useEffect(()=>{
-        console.log("runner: ",props.data)
+        console.log("runnerDipendenti: ",props.data)
         setData(props.data)
+        setUpdateRow(0)
     },[props.data])
+
+    const refresh = () => {
+        props.refreshData()
+        setUpdateRow(0)
+        props.editing(0)
+    }
 
     const deleteDipendente = (id) =>{
         axios
             .delete("http://localhost:8091/dipendenti/"+id)
             .then((response)=>{
                 console.log(response)
-                alert("cancellato")
                 props.refreshData()
             })
 
@@ -36,11 +44,30 @@ function Dipendenti(props){
         return value == 1 ? 0 : 1
         
     }
-
-    const refresh = () => {
-        props.refreshData()
-        setUpdateRow(0)
-        props.editing(0)
+    // Add safety check for data
+    if (!data || !Array.isArray(data)) {
+        return (
+            <div className="container-fluid mt-4">
+                <div className="card shadow">
+                    <div className="card-header bg-primary text-white">
+                        <h5 className="mb-0">
+                            <i className="fas fa-users me-2"></i>
+                            Gestione Dipendenti
+                        </h5>
+                    </div>
+                    <div className="card-body p-0">
+                        <div className="d-flex justify-content-center align-items-center p-5">
+                            <div className="text-center">
+                                <div className="spinner-border text-primary mb-3" role="status">
+                                    <span className="visually-hidden">Caricamento...</span>
+                                </div>
+                                <p className="text-muted">Caricamento dati in corso...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -50,8 +77,8 @@ function Dipendenti(props){
                 <div className="card shadow">
                     <div className="card-header bg-primary text-white">
                         <h5 className="mb-0">
-                            <i className="fas fa-construction me-2"></i>
-                            Gestione Cantieri
+                            <i className="fas fa-users me-2"></i>
+                            Gestione Dipendenti
                         </h5>
                     </div>
                     <div className="card-body p-0">
@@ -93,6 +120,9 @@ function Dipendenti(props){
                                             <th scope="col">
                                                 <i className="fas fa-envelope me-1"></i>fk_azienda
                                             </th>
+                                            <th scope="col" className="text-center">
+                                                <i className="fas fa-cogs me-1"></i>Azioni
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -122,6 +152,25 @@ function Dipendenti(props){
                                                     <span className="flag-icon me-1"></span>
                                                     {item.fk_azienda}
                                                 </td>
+                                                <td>
+                                                    <div className="btn-group" role="group">
+                                                        <button 
+                                                            className="btn btn-outline-warning btn-sm" 
+                                                            onClick={(event) => updateInsertValue(event, item)}
+                                                            title="Modifica dipendente"
+                                                        >
+                                                            <i className="fas fa-edit"></i>
+                                                        </button>
+                                                        <button 
+                                                            className="btn btn-outline-danger btn-sm" 
+                                                            value={item.id} 
+                                                            onClick={() => deleteDipendente(item.id)}
+                                                            title="Elimina dipendente"
+                                                        >
+                                                            <i className="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -133,19 +182,19 @@ function Dipendenti(props){
                         <div className="card-footer bg-light">
                             <small className="text-muted">
                                 <i className="fas fa-info-circle me-1"></i>
-                                Totale cantieri: <strong>{data.length}</strong>
+                                Totale dipendenti: <strong>{data.length}</strong>
                             </small>
                         </div>
                     )}
                 </div>
             </div>
-            ) : (
-                <DatabaseUpdateDipendente
-                    data={singleData} 
-                    updateInsertValue={updateInsertValue} 
-                    refresh={refresh}
-                />
-            )}
+        ) : (
+            <DatabaseUpdateDipendente 
+                data={singleData} 
+                updateInsertValue={updateInsertValue} 
+                refresh={refresh}
+            />
+        )}
         </>
     )
 

@@ -1,301 +1,200 @@
-import { useEffect, useState } from "react"
-import { Button } from "react-bootstrap"
-import axios from "axios"
-import nations from '../../files/nazioni.json';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import nations from "../../files/nazioni.json";
+import { useNavigate } from "react-router-dom"  // Add this import
 
+function DatabaseInsertDipendente(props) {
+    const navigate = useNavigate()
+    const [dataAzienda, setDataAzienda] = useState([]);
+    const [dipendenti, setDipendenti] = useState({
+        nome: "",
+        cognome: "",
+        data_nascita: "",
+        nazionalita: "",
+        codice_fiscale: "",
+        sesso: "",
+        fk_azienda: ""
+    });
 
-function DatabaseInsert(props){
-    const [nazioni,setNazioni] = useState([])
-
-    const [dcantieri, setDCantieri]= useState({
-        nome:"",
-        committente:"",
-        cap:"",
-        nazione:"",
-        data_inizio_cantiere:"",
-        data_fine_cantiere:"",
-        email:"",
-        logo:"",
-        pdf:"",
-        firma:""
-    })
-
-    const [fileLogo, setFileLogo] = useState(null);
-    const [filePDF, setFilePDF] = useState(null);
-    const [fileFirma, setFileFirma] = useState(null);
-
-    const handleFileChangeLogo = (event) => {
-        setFileLogo(event.target.files[0]);
-    };
-    const handleFileChangePDF = (event) => {
-        setFilePDF(event.target.files[0]);
-    };
-    const handleFileChangeFirma = (event) => {
-        setFileFirma(event.target.files[0]);
-    };
-    const handleNome = (event) =>{
-        setDCantieri({
-            ...dcantieri,
-            nome:event.target.value
-        })
-    }
-    const handleEmail = (event) =>{
-        setDCantieri({
-            ...dcantieri,
-            email:event.target.value
-        })
-    }
-    const handleComittente = (event) =>{
-        setDCantieri({
-            ...dcantieri,
-            committente:event.target.value
-        })
-    }
-    const handleCap = (event) =>{
-        setDCantieri({
-            ...dcantieri,
-            cap:event.target.value
-        })
-    }
-    const handleNazione = (event) =>{
-        setDCantieri({
-            ...dcantieri,
-            nazione:event.target.value
-        })
-    }
-    //data inizio cantiere
-    const handleDIC = (event) =>{
-        setDCantieri({
-            ...dcantieri,
-            data_inizio_cantiere:event.target.value
-        })
-    }
-    const handleDFC = (event) =>{
-        setDCantieri({
-            ...dcantieri,
-            data_fine_cantiere:event.target.value
+    const clearForm = () => {
+        setDipendenti({
+            nome: "",
+            cognome: "",
+            data_nascita: "",
+            nazionalita: "",
+            codice_fiscale: "",
+            sesso: "",
+            fk_azienda: ""
         })
     }
 
-    useEffect(()=>{
-        setNazioni(nations);
-    },[props.data])
+    useEffect(() => {
+        axios
+            .get("http://localhost:8091/aziende")
+            .then((response) => {
+                if (response.data) {
+                    setDataAzienda(response.data);
+                } else {
+                    console.log("API returned empty data.");
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching aziende:", error);
+            });
+    }, []);
 
-    const sendDataCantiere = async () => {
-        const newDCantieri = { ...dcantieri };
-
-        const uploadFile = async (file, endpoint, fieldName) => {
-            if (!file) return null;
-
-            const formData = new FormData();
-            formData.append("file", file);
-
-            try {
-                const response = await axios.post(`http://localhost:8000/${endpoint}`, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-                console.log(`${fieldName} uploaded:`, response.data);
-                return `${fieldName}/${response.data}`;
-            } catch (error) {
-                console.error(`Error uploading ${fieldName}:`, error);
-                alert(`Error uploading ${fieldName}`);
-                return null;
-            }
-        };
-
-        // Upload files and collect file paths
-        const logoPath = await uploadFile(fileLogo, "uploadLogo", "logo");
-        const pdfPath = await uploadFile(filePDF, "uploadPdf", "pdf");
-        const firmaPath = await uploadFile(fileFirma, "uploadFirma", "firma");
-
-        // Set the file paths in dcantieri
-        if (logoPath) newDCantieri.logo = logoPath;
-        if (pdfPath) newDCantieri.pdf = pdfPath;
-        if (firmaPath) newDCantieri.firma = firmaPath;
-
-        // Submit the final object
-        console.log("Sending dcantieri:", newDCantieri);
-
-        axios.post("http://localhost:8091/cantieri", newDCantieri, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        .then((response) => {
-            console.log("Cantiere inserted:", response.data);
-            alert("Cantiere inserito con successo!");
-        })
-        .catch((error) => {
-            console.error("Error posting cantiere:", error);
-            alert("Errore durante l'inserimento del cantiere!");
+    const handleChange = (field) => (event) => {
+        setDipendenti({
+            ...dipendenti,
+            [field]: event.target.value,
         });
     };
 
+    const sendDataDipendenti = async () => {
+        console.log(dipendenti)
+        const newDipendente = {
+            nome: dipendenti.nome,
+            cognome: dipendenti.cognome,
+            data_nascita: dipendenti.data_nascita,
+            nazionalita: dipendenti.nazionalita,
+            codice_fiscale: dipendenti.codice_fiscale,
+            sesso: dipendenti.sesso,
+            fkAzienda: Number(dipendenti.fk_azienda) // ✅ must match Spring field and be a number
+        };
+        axios
+            .post("http://localhost:8091/dipendenti", newDipendente, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+            .then((response) => {
+                console.log("Dipendente inserito:", response.data);
+                alert("Dipendente inserito con successo!");
+                if (props.insertForm) {
+                    props.insertForm(0);
+                }
+                clearForm();
+                alert("Azienda inserita con successo!");
+                props.insertForm(0)
+                navigate("/link");
+            })
+            .catch((error) => {
+                console.error("Errore durante l'inserimento del dipendente:", error);
+                alert("Errore durante l'inserimento del dipendente!");
+            });
+    };
 
-
-    return (<>
+    return (
         <div className="container mt-4">
             <div className="row justify-content-center">
                 <div className="col-md-10 col-lg-8">
                     <div className="card shadow">
                         <div className="card-header bg-primary text-white">
                             <h4 className="mb-0">
-                                <i className="fas fa-construction me-2"></i>
-                                Aggiungi Cantiere
+                                <i className="fas fa-user-plus me-2"></i>
+                                Aggiungi Dipendente
                             </h4>
                         </div>
                         <div className="card-body">
                             <form>
                                 <div className="mb-3">
-                                    <label htmlFor="nome" className="form-label fw-bold">
-                                        Nome Cantiere
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        className="form-control" 
+                                    <label htmlFor="nome" className="form-label fw-bold">Nome</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
                                         id="nome"
-                                        placeholder="Inserisci nome cantiere"  
-                                        value={dcantieri.nome} 
-                                        onChange={handleNome}
+                                        placeholder="Inserisci nome"
+                                        value={dipendenti.nome}
+                                        onChange={handleChange("nome")}
                                     />
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="committente" className="form-label fw-bold">
-                                        Committente
-                                    </label>
-                                    <input 
-                                        type="text" 
+                                    <label htmlFor="cognome" className="form-label fw-bold">Cognome</label>
+                                    <input
+                                        type="text"
                                         className="form-control"
-                                        id="committente"
-                                        placeholder="Nome committente" 
-                                        onChange={handleComittente}
-                                        value={dcantieri.committente}
+                                        id="cognome"
+                                        placeholder="Inserisci cognome"
+                                        value={dipendenti.cognome}
+                                        onChange={handleChange("cognome")}
                                     />
                                 </div>
 
                                 <div className="row">
-                                    <div className="col-md-4 mb-3">
-                                        <label htmlFor="cap" className="form-label fw-bold">
-                                            CAP
-                                        </label>
-                                        <input 
-                                            type="number" 
-                                            className="form-control" 
-                                            id="cap"
-                                            placeholder="Codice postale" 
-                                            onChange={handleCap}
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="data_nascita" className="form-label fw-bold">Data di Nascita</label>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="data_nascita"
+                                            value={dipendenti.data_nascita}
+                                            onChange={handleChange("data_nascita")}
                                         />
                                     </div>
-                                    <div className="col-md-8 mb-3">
-                                        <label htmlFor="nazione" className="form-label fw-bold">
-                                            Nazione
-                                        </label>
-                                        <select 
-                                            className="form-select" 
-                                            id="nazione"
-                                            onChange={handleNazione}
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="nazionalita" className="form-label fw-bold">Nazionalità</label>
+                                        <input
+                                            type="text"
+                                            className="form-select"
+                                            id="nazionalita"
+                                            value={dipendenti.nazionalita}
+                                            onChange={handleChange("nazionalita")}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="codice_fiscale" className="form-label fw-bold">Codice Fiscale</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="codice_fiscale"
+                                            value={dipendenti.codice_fiscale}
+                                            onChange={handleChange("codice_fiscale")}
+                                        />
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="sesso" className="form-label fw-bold">Sesso</label>
+                                        <select
+                                            className="form-select"
+                                            id="sesso"
+                                            value={dipendenti.sesso}
+                                            onChange={handleChange("sesso")}
                                         >
-                                            <option value="">Seleziona nazione</option>
-                                            {nazioni.map((nazione, index) => (
-                                                <option value={nazione.name} key={index}>
-                                                    {nazione.name}
-                                                </option>
-                                            ))}
+                                            <option value="">Seleziona sesso</option>
+                                            <option value="M">Maschio</option>
+                                            <option value="F">Femmina</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <div className="row">
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="dataInizio" className="form-label fw-bold">
-                                            Data Inizio Cantiere
-                                        </label>
-                                        <input 
-                                            type="date" 
-                                            className="form-control" 
-                                            id="dataInizio"
-                                            onChange={handleDIC}
-                                        />
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="dataFine" className="form-label fw-bold">
-                                            Data Fine Cantiere
-                                        </label>
-                                        <input 
-                                            type="date" 
-                                            className="form-control" 
-                                            id="dataFine"
-                                            onChange={handleDFC}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="email" className="form-label fw-bold">
-                                        Email
-                                    </label>
-                                    <input 
-                                        type="email" 
-                                        className="form-control" 
-                                        id="email"
-                                        placeholder="email@esempio.com" 
-                                        onChange={handleEmail}
-                                    />
-                                </div>
-
-                                <div className="row">
-                                    <div className="col-md-4 mb-3">
-                                        <label htmlFor="logo" className="form-label fw-bold">
-                                            Logo
-                                        </label>
-                                        <input 
-                                            type="file" 
-                                            className="form-control" 
-                                            id="logo"
-                                            accept="image/*"
-                                            onChange={handleFileChangeLogo}
-                                        />
-                                        <div className="form-text">Formati supportati: JPG, PNG, GIF</div>
-                                    </div>
-                                    <div className="col-md-4 mb-3">
-                                        <label htmlFor="pdf" className="form-label fw-bold">
-                                            Documento PDF
-                                        </label>
-                                        <input 
-                                            type="file" 
-                                            className="form-control" 
-                                            id="pdf"
-                                            accept=".pdf"
-                                            onChange={handleFileChangePDF}
-                                        />
-                                        <div className="form-text">Solo file PDF</div>
-                                    </div>
-                                    <div className="col-md-4 mb-3">
-                                        <label htmlFor="firma" className="form-label fw-bold">
-                                            Firma
-                                        </label>
-                                        <input 
-                                            type="file" 
-                                            className="form-control" 
-                                            id="firma"
-                                            accept="image/*"
-                                            onChange={handleFileChangeFirma}
-                                        />
-                                        <div className="form-text">Immagine della firma</div>
-                                    </div>
+                                <div className="mb-4">
+                                    <label htmlFor="fkAzienda" className="form-label fw-bold">Azienda Associata</label>
+                                    <select
+                                        className="form-select"
+                                        id="fkAzienda"
+                                        value={dipendenti.fk_azienda}
+                                        onChange={handleChange("fk_azienda")}
+                                    >
+                                        <option value="">Seleziona azienda</option>
+                                        {dataAzienda.map((item, index) => (
+                                            <option key={index} value={item.id}>
+                                                {item.ragione_sociale} (ID: {item.id})
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div className="d-grid gap-2 mt-4">
-                                    <button 
+                                    <button
                                         type="button"
-                                        className="btn btn-primary btn-lg" 
-                                        onClick={sendDataCantiere}
+                                        className="btn btn-primary btn-lg"
+                                        onClick={sendDataDipendenti}
                                     >
                                         <i className="fas fa-save me-2"></i>
-                                        Inserisci Cantiere
+                                        Inserisci Dipendente
                                     </button>
                                 </div>
                             </form>
@@ -304,8 +203,7 @@ function DatabaseInsert(props){
                 </div>
             </div>
         </div>
-    
-    </>)
+    );
 }
 
-export default DatabaseInsert
+export default DatabaseInsertDipendente;
